@@ -14,7 +14,7 @@ import { useActionState } from 'react';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const initialState: State = { message: null, errors: {} };
-  const [state, formAction] = useActionState(createInvoice, initialState);
+  const [state, formAction, isPending] = useActionState(createInvoice, initialState);
 
   const hasValidatedFieldsErrors = state.errors && Object.keys(state.errors).length > 0;
 
@@ -147,7 +147,9 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         >
           Cancel
         </Link>
-        <Button type="submit">Create Invoice</Button>
+        <Button type="submit" aria-disabled={isPending}>
+          {isPending ? 'Creating Invoice...' : 'Create Invoice'}
+        </Button>
       </div>
     </form>
   );

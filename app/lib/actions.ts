@@ -41,6 +41,8 @@ export async function createInvoice(prevState: State, formData: FormData) {
         status: formData.get('status'),
     });
 
+    const errors: { customerId?: string[]; amount?: string[]; status?: string[] } = {};
+
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
@@ -61,7 +63,9 @@ export async function createInvoice(prevState: State, formData: FormData) {
         `;
     } catch (error) {
         // If a database error occurs, return a more specific error.
+        console.error("Database Error: ", error);
         return {
+            errors,
             message: 'Database Error: Failed to Create Invoice.',
         };
     }
@@ -82,6 +86,8 @@ export async function updateInvoice(
         status: formData.get('status'),
     });
 
+    const errors: { customerId?: string[]; amount?: string[]; status?: string[] } = {};
+
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
@@ -99,7 +105,10 @@ export async function updateInvoice(
           WHERE id = ${id}
         `;
     } catch (error) {
-        return { message: 'Database Error: Failed to Update Invoice.' };
+        return {
+            errors,
+            message: 'Database Error: Failed to Update Invoice.'
+        };
     }
 
     revalidatePath('/dashboard/invoices');
