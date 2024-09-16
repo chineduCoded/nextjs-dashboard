@@ -13,7 +13,14 @@ import { createInvoice, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
-  const initialState: State = { message: null, errors: {} };
+  const initialState: State = {
+    message: null,
+    errors: {
+      customerId: [],
+      amount: [],
+      status: []
+    }
+  };
   const [state, formAction, isPending] = useActionState(createInvoice, initialState);
 
   const hasValidatedFieldsErrors = state.errors && Object.keys(state.errors).length > 0;
